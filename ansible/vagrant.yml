@@ -1,0 +1,9 @@
+---
+
+- hosts: all
+  remote_user: "{{ remote_user }}"
+  tasks:
+    - name: debug
+      debug: msg="remote_user {{ remote_user }}"
+  roles:
+    - common

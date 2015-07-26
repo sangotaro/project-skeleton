@@ -1,0 +1,5 @@
+---
+
+java:
+  dl_url: http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jdk-8u51-linux-x64.rpm
+  dl_path: /usr/local/src/jdk-8u51-linux-x64.rpm

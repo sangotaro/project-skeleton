@@ -1,0 +1,6 @@
+---
+
+remote_user: vagrant
+
+mysql:
+  root_password: test

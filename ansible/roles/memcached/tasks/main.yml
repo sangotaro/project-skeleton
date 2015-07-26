@@ -1,0 +1,9 @@
+---
+
+- name: install Memcached
+  yum: name=memcached state=present
+  sudo: true
+
+- name: ensure memcached service is started and enabled at boot
+  service: name=memcached state=started enabled=yes
+  sudo: true

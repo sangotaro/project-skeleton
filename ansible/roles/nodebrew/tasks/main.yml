@@ -1,0 +1,21 @@
+---
+
+- name: install nodebrew
+  shell: curl -L git.io/nodebrew | perl - setup
+
+- name: put nodebrew path setting script
+  template: src=nodebrew.sh.j2 dest=/etc/profile.d/nodebrew.sh
+            owner=root group=root mode=0755
+  sudo: true
+
+- name: check node
+  command: "test -e ~/.nodebrew/node/{{ nodebrew.node_version }}"
+  ignore_errors: true
+  register: already_installed
+
+- name: install node
+  shell: $SHELL -lc "nodebrew install-binary {{ nodebrew.node_version }}"
+  when: already_installed.rc != 0
+
+- name: select node version
+  shell: $SHELL -lc "nodebrew use {{ nodebrew.node_version }}"

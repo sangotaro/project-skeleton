@@ -1,0 +1,37 @@
+---
+
+- name: install software collections (SCL)
+  yum: name=centos-release-SCL state=present
+  sudo: true
+
+- name: install epel repo
+  yum: name=epel-release state=present
+  sudo: true
+
+- name: install remi repo
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+  sudo: true
+
+- name: set timezone
+  shell: cp /usr/share/zoneinfo/Japan /etc/localtime
+  sudo: true
+
+- name: install sl command
+  yum: name=sl state=latest enablerepo=epel
+  sudo: true
+
+- name: install Git
+  yum: name=git state=latest
+  sudo: true
+
+- name: install telnet
+  yum: name=telnet state=latest
+  sudo: true
+
+- name: install wget
+  yum: name=wget state=latest
+  sudo: true
+
+- name: install curl
+  yum: name=curl state=latest
+  sudo: true

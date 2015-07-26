@@ -1,0 +1,9 @@
+---
+
+- name: install redis
+  yum: name=redis state=present enablerepo=remi
+  sudo: true
+
+- name: ensure redis-server service is started and enabled at boot
+  service: name=redis state=started enabled=yes
+  sudo: true

@@ -1,0 +1,13 @@
+---
+
+- name: start cassandra
+  service: name=cassandra state=started
+  sudo: true
+
+- name: restart cassandra
+  service: name=cassandra state=restarted
+  sudo: true
+
+- name: stop cassandra
+  service: name=cassandra state=stopped
+  sudo: true

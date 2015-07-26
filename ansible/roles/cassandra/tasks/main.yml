@@ -1,0 +1,16 @@
+---
+
+- name: copy the datastax.repo
+  template: src=datastax.repo.j2 dest=/etc/yum.repos.d/datastax.repo
+  sudo: true
+
+- name: install cassandra22
+  yum: name={{item}} state=present enablerepo=datastax
+  with_items:
+    - dsc22
+    - cassandra22-tools
+  sudo: true
+
+- name: ensure cassandra service is started and enabled at boot
+  service: name=cassandra state=started enabled=yes
+  sudo: true

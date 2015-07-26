@@ -1,0 +1,70 @@
+---
+
+- name: install build depends
+  yum: name={{ item }} state=present
+  with_items:
+    - gcc
+    - openssl-devel
+    - libyaml-devel
+    - readline-devel
+    - zlib-devel
+    - libffi-devel
+    - git
+  sudo: true
+
+- name: update rbenv repo
+  git: repo=git://github.com/sstephenson/rbenv.git
+       dest={{ rbenv.root }}
+       version={{ rbenv.version }}
+       accept_hostkey=yes
+
+- name: add rbenv initialization to profile
+  template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh
+            owner=root group=root mode=0755
+  sudo: true
+
+- name: check ruby-build installed
+  command: test -x /usr/local/bin/ruby-build
+  register: rbuild_present
+  ignore_errors: yes
+
+- name: create temporary directory
+  command: mktemp -d
+  register: tempdir
+  when: rbuild_present|failed
+
+- name: clone ruby-build repo
+  git: repo=git://github.com/sstephenson/ruby-build.git dest={{ tempdir.stdout }}/ruby-build
+  when: rbuild_present|failed
+
+- name: install ruby-build
+  command: ./install.sh chdir={{ tempdir.stdout }}/ruby-build
+  when: rbuild_present|failed
+  sudo: true
+
+- name: remove temporary directory
+  file: path={{ tempdir.stdout }} state=absent
+  when: rbuild_present|failed
+
+- name: check ruby version installed
+  shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
+  register: ruby_installed
+  ignore_errors: yes
+
+- name: install ruby
+  shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
+  when: ruby_installed|failed
+
+- name: set global ruby
+  shell: bash -lc "rbenv global {{ rbenv.ruby_version }}"
+  when: ruby_installed|failed
+  notify: rbenv rehash
+
+- name: set gemrc
+  copy: src=gemrc dest=/home/{{ remote_user }}/.gemrc
+
+- name: install gem packages
+  gem: name={{ item }} executable={{ rbenv.root }}/shims/gem user_install=False
+  with_items:
+    - bundler
+  notify: rbenv rehash
