@@ -16,6 +16,10 @@
   shell: cp /usr/share/zoneinfo/Japan /etc/localtime
   sudo: true
 
+- name: set timezone
+  shell: localedef -f UTF-8 -i ja_JP ja_JP
+  sudo: true
+
 - name: install sl command
   yum: name=sl state=latest enablerepo=epel
   sudo: true
@@ -34,4 +38,8 @@
 
 - name: install curl
   yum: name=curl state=latest
+  sudo: true
+
+- name: install nc
+  yum: name=nc state=latest
   sudo: true
