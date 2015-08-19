@@ -16,7 +16,7 @@
   shell: cp /usr/share/zoneinfo/Japan /etc/localtime
   sudo: true
 
-- name: set timezone
+- name: set locale
   shell: localedef -f UTF-8 -i ja_JP ja_JP
   sudo: true
 
