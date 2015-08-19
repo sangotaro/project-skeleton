@@ -1,0 +1,45 @@
+---
+
+- name: install build depends
+  yum: name={{ item }} state=present
+  with_items:
+    - gcc
+    - gcc-c++
+    - patch
+    - readline-devel
+    - zlib-devel
+    - openssl-devel
+    - libxml2-devel
+    - libxslt-devel
+    - libselinux-python
+  sudo: true
+
+- name: update pyenv repo
+  git: repo=git://github.com/yyuu/pyenv.git
+       dest={{ pyenv.root }}
+       version={{ pyenv.version }}
+       accept_hostkey=yes
+
+- name: add pyenv initialization to profile
+  template: src=pyenv.sh.j2 dest=/etc/profile.d/pyenv.sh
+            owner=root group=root mode=0755
+  sudo: true
+
+- name: check python
+  command: "test -e {{ pyenv.root }}/versions/{{ pyenv.python_version }}"
+  register: python_installed
+  ignore_errors: yes
+
+- name: install python
+  shell: bash -lc "pyenv install {{ pyenv.python_version }}"
+  when: python_installed|failed
+  notify: pyenv rehash
+
+- name: set global python
+  shell: bash -lc "pyenv global {{ pyenv.python_version }}"
+  when: python_installed|failed
+
+- name: pip install packages
+  pip: name={{ item }}
+  with_items:
+    - awscli

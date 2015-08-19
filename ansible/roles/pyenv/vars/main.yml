@@ -1,0 +1,6 @@
+---
+
+pyenv:
+  root: ~/.pyenv
+  version: v20150719
+  python_version: 2.7.10
