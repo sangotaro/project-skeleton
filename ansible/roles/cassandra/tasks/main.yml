@@ -5,7 +5,7 @@
   sudo: true
 
 - name: install cassandra22
-  yum: name={{item}} state=present enablerepo=datastax
+  yum: name={{ item }} state=present enablerepo=datastax
   with_items:
     - dsc22
     - cassandra22-tools

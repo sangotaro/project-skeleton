@@ -43,3 +43,16 @@
   pip: name={{ item }}
   with_items:
     - awscli
+
+- name: download cqlsh repo
+  git: repo=git://github.com/spiside/cqlsh.git
+       dest=/usr/local/src/cqlsh
+       version=v5.0.1
+       accept_hostkey=yes
+  sudo: true
+
+- name: pip install cqlsh
+  pip: name={{ item }}
+  with_items:
+    - /usr/local/src/cqlsh
+    - cassandra-driver
