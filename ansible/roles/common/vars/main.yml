@@ -1,0 +1,7 @@
+---
+
+zoneinfo_path: /usr/share/zoneinfo/Asia/Tokyo
+zone: Asia/Tokyo
+charmap_file: UTF-8
+locale_file: ja_JP
+locale: ja_JP.UTF-8

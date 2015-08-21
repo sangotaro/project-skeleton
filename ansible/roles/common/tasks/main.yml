@@ -1,5 +1,31 @@
 ---
 
+- name: set localtime
+  file: >
+    src={{ zoneinfo_path }}
+    dest=/etc/localtime
+    state=link
+    force=yes
+  sudo: true
+
+- name: set zone to /etc/sysconfig/clock
+  replace: >
+    dest=/etc/sysconfig/clock
+    regexp='^ZONE=\".*\"'
+    replace='ZONE="{{ zone }}"'
+  sudo: true
+
+- name: localedef
+  shell: localedef -f {{ charmap_file }} -i {{ locale_file }} {{ locale }}
+  sudo: true
+
+- name: set locale to /etc/sysconfig/i18n
+  replace: >
+    dest=/etc/sysconfig/i18n
+    regexp='^LANG=.*'
+    replace='LANG="{{ locale }}"'
+  sudo: true
+
 - name: install software collections (SCL)
   yum: name=centos-release-SCL state=present
   sudo: true
@@ -12,19 +38,11 @@
   yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
   sudo: true
 
-- name: set timezone
-  shell: cp /usr/share/zoneinfo/Japan /etc/localtime
-  sudo: true
-
-- name: set locale
-  shell: localedef -f UTF-8 -i ja_JP ja_JP
-  sudo: true
-
 - name: install sl command
   yum: name=sl state=latest enablerepo=epel
   sudo: true
 
-- name: install Git
+- name: install git
   yum: name=git state=latest
   sudo: true
 
