@@ -2,6 +2,7 @@
 
 - hosts: all
   remote_user: "{{ remote_user }}"
+  sudo: yes
   tasks:
     - name: debug
       debug: msg="remote_user {{ remote_user }}"

@@ -1,79 +1,61 @@
 ---
-
 - name: set localtime
   file: >
     src={{ zoneinfo_path }}
     dest=/etc/localtime
     state=link
     force=yes
-  sudo: true
 
 - name: set zone to /etc/sysconfig/clock
   replace: >
     dest=/etc/sysconfig/clock
     regexp='^ZONE=\".*\"'
     replace='ZONE="{{ zone }}"'
-  sudo: true
 
 - name: localedef
   shell: localedef -f {{ charmap_file }} -i {{ locale_file }} {{ locale }}
-  sudo: true
 
 - name: set locale to /etc/sysconfig/i18n
   replace: >
     dest=/etc/sysconfig/i18n
     regexp='^LANG=.*'
     replace='LANG="{{ locale }}"'
-  sudo: true
 
 - name: yum update
   yum: name=* state=latest
-  sudo: true
 
 - name: install software collections (SCL)
   yum: name=centos-release-SCL state=present
-  sudo: true
 
 - name: install epel repo
   yum: name=epel-release state=present
-  sudo: true
 
 - name: install remi repo
   yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
-  sudo: true
 
 - name: install rpmforge repo
   yum: name=http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm state=present
-  sudo: true
 
 - name: install ius repo
   yum: name=https://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm state=present
-  sudo: true
 
 - name: install sl command
   yum: name=sl state=latest enablerepo=epel
-  sudo: true
 
 - name: remove git
   yum: name=git state=absent
-  sudo: true
 
 - name: install git
   yum: name=git2u state=latest enablerepo=ius
-  sudo: true
 
 - name: install telnet
   yum: name=telnet state=latest
-  sudo: true
 
 - name: install wget
   yum: name=wget state=latest
-  sudo: true
 
 - name: install curl
   yum: name=curl state=latest
-  sudo: true
 
 - name: install nc
   yum: name=nc state=latest
-  sudo: true

@@ -4,4 +4,3 @@
   with_items:
     - ncurses
     - ncurses-devel
-  sudo: true

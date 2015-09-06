@@ -1,5 +1,4 @@
 ---
-
 - name: install build depends
   yum: name={{ item }} state=present
   with_items:
@@ -12,50 +11,58 @@
     - libxml2-devel
     - libxslt-devel
     - libselinux-python
-  sudo: true
 
 - name: update pyenv repo
-  git: repo=git://github.com/yyuu/pyenv.git
-       dest={{ pyenv.root }}
-       version={{ pyenv.version }}
-       accept_hostkey=yes
+  git:
+    repo=git://github.com/yyuu/pyenv.git
+    dest={{ pyenv.root }}
+    version={{ pyenv.version }}
+    accept_hostkey=yes
+  sudo: no
 
 - name: add pyenv initialization to profile
-  template: src=pyenv.sh.j2 dest=/etc/profile.d/pyenv.sh
-            owner=root group=root mode=0755
-  sudo: true
+  template:
+    src=pyenv.sh.j2
+    dest=/etc/profile.d/pyenv.sh
+    owner=root group=root mode=0755
 
 - name: check python
   command: "test -e {{ pyenv.root }}/versions/{{ pyenv.python_version }}"
   register: python_installed
   ignore_errors: yes
+  sudo: no
 
 - name: install python
   shell: bash -lc "pyenv install {{ pyenv.python_version }}"
   when: python_installed|failed
   notify: pyenv rehash
+  sudo: no
 
 - name: set global python
   shell: bash -lc "pyenv global {{ pyenv.python_version }}"
   when: python_installed|failed
+  sudo: no
 
 - name: pip install --upgrade pip
   pip: name=pip state=latest
+  sudo: no
 
 - name: pip install packages
   pip: name={{ item }}
   with_items:
     - awscli
+  sudo: no
 
 - name: download cqlsh repo
-  git: repo=git://github.com/spiside/cqlsh.git
-       dest=/usr/local/src/cqlsh
-       version=v5.0.1
-       accept_hostkey=yes
-  sudo: true
+  git:
+    repo=git://github.com/spiside/cqlsh.git
+    dest={{ src_dir }}/cqlsh
+    version=v5.0.1
+    accept_hostkey=yes
 
 - name: pip install cqlsh
   pip: name={{ item }}
   with_items:
-    - /usr/local/src/cqlsh
+    - "{{ src_dir }}/cqlsh"
     - cassandra-driver
+  sudo: no

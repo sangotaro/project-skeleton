@@ -2,3 +2,4 @@
 
 - name: pyenv rehash
   shell: bash -lc "pyenv rehash"
+  sudo: no

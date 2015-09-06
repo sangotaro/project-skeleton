@@ -3,14 +3,12 @@
   get_url:
     url=https://github.com/tmux/tmux/releases/download/{{ tmux.version }}/tmux-{{ tmux.version }}.tar.gz
     dest="{{ src_dir }}/tmux-{{ tmux.version }}.tar.gz"
-  sudo: true
 
 - name: extract tmux source
   unarchive:
     src="{{ src_dir }}/tmux-{{ tmux.version }}.tar.gz"
     dest="{{ src_dir }}"
     copy=no
-  sudo: true
 
 - name: install tmux
   shell: >
@@ -21,4 +19,3 @@
     - ./configure
     - make
     - make install
-  sudo: true

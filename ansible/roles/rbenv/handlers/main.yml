@@ -2,3 +2,4 @@
 
 - name: rbenv rehash
   shell: bash -lc "rbenv rehash"
+  sudo: no
