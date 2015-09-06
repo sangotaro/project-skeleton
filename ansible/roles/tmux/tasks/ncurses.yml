@@ -1,0 +1,7 @@
+---
+- name: install ncurses
+  yum: name={{ item }} state=present
+  with_items:
+    - ncurses
+    - ncurses-devel
+  sudo: true

@@ -1,0 +1,4 @@
+---
+- include: libevent.yml
+- include: ncurses.yml
+- include: tmux.yml

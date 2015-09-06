@@ -1,0 +1,8 @@
+---
+- name: add path to shared libraries
+  shell: >
+    {{ item }}
+  with_items:
+    - bash -lc "echo /usr/local/lib >> /etc/ld.so.conf.d/usrlocal.conf"
+    - ldconfig
+  sudo: true
